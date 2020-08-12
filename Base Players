@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+
+namespace BasePlayers
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BasePlayers basePlayers = new BasePlayers(new List<Player> { new Player("Эмма", 5, false), new Player("Луис", 1, false) });
+            while (true)
+            {
+                Console.WriteLine("1 - Добавить игрока\n2 - Бан игрока\n3 - Разбан игрока\n4 - Удалить игрока\n5 - Показать базу игроков");
+                Console.Write("Введите команду: ");
+                string userInput = Console.ReadLine();
+                switch (userInput)
+                {
+                    case "1":
+                        basePlayers.AddPlayer();
+                        break;
+                    case "2":
+                        basePlayers.BanPlayer();
+                        break;
+                    case "3":
+                        basePlayers.UnbanPlayer();
+                        break;
+                    case "4":
+                        basePlayers.DeletePlayer();
+                        break;
+                    case "5":
+                        basePlayers.DrawBase();
+                        break;
+                }
+                Console.Write("Нажмите кнопку для возврата в меню");
+                Console.ReadLine();
+                Console.Clear();
+            }
+        }
+    }
+
+    class Player
+    {
+        public string NickName { get; private set; }
+        public int Level { get; private set; }
+        public bool BanStatus { get; private set; }
+        public Player(string nickName, int level, bool banStatus)
+        {
+            NickName = nickName;
+            Level = level;
+            BanStatus = banStatus;
+        }
+        public void Ban()
+        {
+            BanStatus = true;
+        }
+
+        public void Unban()
+        {
+            BanStatus = false;
+        }
+    }
+
+    class BasePlayers
+    {
+        private readonly List<Player> _players = new List<Player>();
+
+        public BasePlayers(List<Player> players)
+        {
+            _players = players;
+        }
+        public void AddPlayer()
+        {
+            Console.Write("Введите ник: ");
+            string nickName = Console.ReadLine();
+            Console.Write("Введите уровень: ");
+            int level = Convert.ToInt32(Console.ReadLine());
+            _players.Add(new Player(nickName, level, false));
+        }
+
+        public void BanPlayer()
+        {
+            Console.Write("Введите номер игрока: ");
+            int input = Convert.ToInt32(Console.ReadLine()) - 1;
+            _players[input].Ban();
+        }
+
+        public void UnbanPlayer()
+        {
+            Console.Write("Введите номер игрока: ");
+            int input = Convert.ToInt32(Console.ReadLine()) - 1;
+            _players[input].Unban();
+        }
+
+        public void DeletePlayer()
+        {
+            Console.Write("Введите номер игрока: ");
+            int input = Convert.ToInt32(Console.ReadLine()) - 1;
+            _players.RemoveAt(input);
+        }
+
+        public void DrawBase()
+        {
+            for (int i = 0; i < _players.Count; i++)
+            {
+                Console.WriteLine("Номер: " + (i + 1) + " | Ник: " + _players[i].NickName + " | Уровень: " + _players[i].Level + " | Статус бан: " + _players[i].BanStatus);
+            }
+        }
+    }
+}
